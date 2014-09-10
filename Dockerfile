@@ -6,7 +6,7 @@ MAINTAINER Naoto ISHIKAWA <toona@toona.org>
 RUN cd /etc/yum.repos.d && sed -i 's,mirror\.centos\.org/centos/,ftp.sakura.ad.jp/pub/linux/centos/,g' *.repo && sed -i 's/^mirrorlist/#mirrorlist/g; s/^#baseurl/baseurl/g' *.repo && yum -y clean all
 
 # install apps via yum
-RUN yum install -y bc bzip2 file gcc gcc-c++ gettext git man openssh-clients patch patchutils rsync strace unzip wget witch yum-plugin-security yum-utils zip gdb libstdc++-devel libxml2 tar sudo ntp emacs-nox telnet nc zsh libtiff freetype libpng fontconfig libX11 libhugetlbfs libXpm gd && yum install -y --enablerepo=centosplus openssl-devel git openssh-server make hostname
+RUN yum install -y bc bzip2 file gcc gcc-c++ gettext git man openssh-clients patch patchutils rsync strace unzip wget witch yum-plugin-security yum-utils zip gdb libstdc++-devel libxml2 tar sudo ntp emacs-nox telnet nc zsh libtiff freetype libpng fontconfig libX11 libhugetlbfs libXpm gd && yum install -y --enablerepo=centosplus openssl-devel git openssh-server make hostname screen
 
 # install apps
 ADD setup /root/setup
@@ -49,5 +49,7 @@ RUN groupadd -g 502 toona && \
     perl -i -nlpe 's,(wheel:x:\d+?:),$1toona,g' /etc/group
 
 EXPOSE 8022
+
+RUN cd ~toona/.dot-files && sudo -u toona -H git pull
 
 CMD ["/usr/local/bin/svscanboot"]
