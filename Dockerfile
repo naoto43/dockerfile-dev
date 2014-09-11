@@ -53,3 +53,8 @@ EXPOSE 8022
 RUN cd ~toona/.dot-files && sudo -u toona -H git pull
 
 CMD ["/usr/local/bin/svscanboot"]
+
+# migemo 
+RUN rpm -Uvh ftp://fr.rpmfind.net/linux/fedora/linux/releases/19/Everything/x86_64/os/Packages/c/cmigemo-1.3-0.10.date20110227.fc19.1.x86_64.rpm
+
+
