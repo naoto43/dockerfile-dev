@@ -34,7 +34,8 @@ RUN yum install -y openssh-clients  openssh-server && \
 # install apps via yum
 RUN yum install -y bc bzip2 file gcc gcc-c++ gettext git man patch patchutils rsync strace unzip wget \
     witch yum-plugin-security yum-utils zip gdb libstdc++-devel libxml2 tar ntp emacs-nox telnet nc zsh libtiff \
-    freetype libpng fontconfig libX11 libhugetlbfs libXpm gd  git make hostname screen open-ssl && \
+    freetype libpng fontconfig libX11 libhugetlbfs libXpm gd  git make hostname screen open-ssl \
+    bash geoip bind-utils expat-devel java && \
     yum install -y --enablerepo=centosplus openssl-devel && \
     rpm -Uvh ftp://fr.rpmfind.net/linux/fedora/linux/releases/19/Everything/x86_64/os/Packages/c/cmigemo-1.3-0.10.date20110227.fc19.1.x86_64.rpm && \
     echo OK
@@ -42,21 +43,42 @@ RUN yum install -y bc bzip2 file gcc gcc-c++ gettext git man patch patchutils rs
 # install apps
 ADD setup /root/setup
 
-RUN adduser -u189 logadmin -s /sbin/nologin && \ 
-    cd /root/setup/daemontools && sh install.sh > /dev/null 2>&1 && \
-    cd /root/setup/ucspi       && sh install.sh > /dev/null 2>&1 && \
+ADD setup/djb /root/setup/djb
+RUN groupadd -g 189 logadmin && \
+    adduser -u189 -g189 logadmin -s /sbin/nologin && \ 
+    echo ">> SETUP daemontools"    && \
+    cd /root/setup/djb/daemontools && sh install.sh > /dev/null 2>&1 && \
+    echo ">> SETUP ucspi"          && \
+    cd /root/setup/djb/ucspi       && sh install.sh > /dev/null 2>&1 && \
+    echo ">> SETUP qmail"          && \
+    cd /root/setup/djb/qmail       && sh install.sh > /dev/null 2>&1 && \
+    cd /service && \
+    ln -s /var/qmail/supervise/qmail-send  && \
+    ln -s /var/qmail/supervise/qmail-smtpd && \
+    echo ">> SETUP vpopmail"       && \
+    cd /root/setup/djb/vpopmail    && sh install.sh > /dev/null 2>&1 && \
+    echo ">> SETUP djbdns"         && \
+    cd /root/setup/djb/djbdns      && sh install.sh > /dev/null 2>&1 && \
     echo OK
+    # cd /service && \
+    # ln -s /home/dns/dnscache .dnscache && \
+    # ln -s /home/dns/tinydns  .tinydns  && \  
 
-# cd /root/setup/perl-5.20 && sh install.sh > /dev/null 2>&1 && \
-# /usr/local/bin/cpanm install --mirror ftp://ftp.sakura.ad.jp/pub/lang/perl/CPAN/ --notest Carton && \
-RUN cd /root/setup/perl-5.20  && \
-    tar zxf perl-5.20.tar.gz  && \
-    mv perl-5.20 /usr/local/. && \
+#     cd /usr/local/bin          && ln -s /usr/local/perl-5.20/bin/perl && \
+#     curl -LOk http://xrl.us/cpanm && chmod +x cpanm && \
+#     perl -i -nlpe 's,^\#\!.*,#!/usr/local/perl-5.20/bin/perl,g' cpanm && \
+#     /usr/local/bin/cpanm install --mirror ftp://ftp.sakura.ad.jp/pub/lang/perl/CPAN/ --notest Carton > /dev/null 2>&1 && \
+ADD setup/perl-5.20 /root/setup/perl-5.20
+RUN echo ">> SETUP perl-5.20 with Carton" && \
+    cd /root/setup/perl-5.20              && \
+    tar zxf perl-5.20-Carton.tar.gz       && mv perl-5.20 /usr/local/.  && \
     cd /usr/local/bin && \
     ln -s /usr/local/perl-5.20/bin/perl && \
-    curl -LOk http://xrl.us/cpanm && \
-    chmod +x cpanm && \
-    perl -i -nlpe 's,^\#\!.*,#!/usr/local/perl-5.20/bin/perl,g' cpanm && \
+    ln -s /usr/local/perl-5.20/bin/perldoc && \
+    ln -s /usr/local/perl-5.20/bin/cpanm   && \
+    ln -s /usr/local/perl-5.20/bin/carton  && \
+    perl -i -nlpe 's,^\#\!.*,#!/usr/local/perl-5.20/bin/perl,g' cpanm  && \
+    perl -i -nlpe 's,^\#\!.*,#!/usr/local/perl-5.20/bin/perl,g' carton && \
     echo OK
 
 # setup /service/sshd 

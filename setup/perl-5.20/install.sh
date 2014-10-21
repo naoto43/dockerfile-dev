@@ -7,7 +7,7 @@
 # ===========================================
 GET_COMMAND=wget
 
-GET_FILE=perl-5.20.0
+GET_FILE=perl-5.20.1
 
 GET_URL=http://ftp.funet.fi/pub/CPAN/src/$GET_FILE.tar.gz
 

@@ -1,0 +1,32 @@
+diff -ru djbdns-1.05/query.c djbdns-1.05-new/query.c
+--- djbdns-1.05/query.c 2001-02-11 22:11:45.000000000 +0100
++++ djbdns-1.05-new/query.c     2005-11-10 18:41:28.000000000 +0100
+@@ -203,7 +203,7 @@
+
+
+   NEWNAME:
+-  if (++z->loop == 100) goto DIE;
++  if (++z->loop == QUERY_MAXLOOP) goto DIE;
+   d = z->name[z->level];
+   dtype = z->level ? DNS_T_A : z->type;
+   dlen = dns_domain_length(d);
+@@ -449,7 +449,7 @@
+
+
+   HAVEPACKET:
+-  if (++z->loop == 100) goto DIE;
++  if (++z->loop == QUERY_MAXLOOP) goto DIE;
+   buf = z->dt.packet;
+   len = z->dt.packetlen;
+
+diff -ru djbdns-1.05/query.h djbdns-1.05-new/query.h
+--- djbdns-1.05/query.h 2001-02-11 22:11:45.000000000 +0100
++++ djbdns-1.05-new/query.h     2005-11-10 18:39:58.000000000 +0100
+@@ -7,6 +7,7 @@
+ #define QUERY_MAXLEVEL 5
+ #define QUERY_MAXALIAS 16
+ #define QUERY_MAXNS 16
++#define QUERY_MAXLOOP 1000
+
+ struct query {
+   unsigned int loop;

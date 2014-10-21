@@ -1,0 +1,9 @@
+diff -u qmail-1.03.old/home.sh qmail-1.03.new/home.sh
+--- qmail-1.03.old/home.sh	1998-06-15 19:53:16.000000000 +0900
++++ qmail-1.03.new/home.sh	2003-08-24 11:53:07.000000000 +0900
+@@ -4,4 +4,4 @@
+ # Using qmail-local to deliver messages to ~/Mailbox by default.
+ 
+ exec env - PATH="QMAIL/bin:$PATH" \
+-qmail-start ./Mailbox splogger qmail
++qmail-start ./Maildir/ splogger qmail

@@ -1,0 +1,13 @@
+--- qmail-1.03/qmail-qread.c.dist	Mon Jun 15 19:53:16 1998
++++ qmail-1.03/qmail-qread.c	Mon Oct 15 18:50:53 2001
+@@ -65,8 +65,8 @@
+ 
+  len = 0;
+  datetime_tai(&dt,qtime);
+- i = date822fmt(s,&dt) - 7/*XXX*/; len += i; if (s) s += i;
+- i = fmt_str(s," GMT  #"); len += i; if (s) s += i;
++ i = date822fmt(s,&dt) - 1/*XXX*/; len += i; if (s) s += i;
++ i = fmt_str(s,"  #"); len += i; if (s) s += i;
+  i = fmt_ulong(s,id); len += i; if (s) s += i;
+  i = fmt_str(s,"  "); len += i; if (s) s += i;
+  i = fmt_ulong(s,size); len += i; if (s) s += i;

@@ -1,0 +1,6 @@
+RUN sudo yum install pstree
+RUN emacs /etc/hosts
+RUN emacs /etc/resolv.conf
+RUN emacs /etc/resolv.conf
+RUN yum install openssl
+RUN sudo yum install openssl

@@ -1,0 +1,3 @@
+#!/bin/sh
+exec 2>&1
+exec envuidgid dns envdir ./env softlimit -d300000 /usr/local/bin/tinydns
